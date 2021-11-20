@@ -50,8 +50,8 @@
             <tbody>
 
                 <?php
-                include('database.php');
-                $contacts = new Database();
+                include('contacts_database.php');
+                $contacts = new ContactsDatabase();
                 $list = $contacts->read();
                 ?>
                 <?php

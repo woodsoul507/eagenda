@@ -1,12 +1,12 @@
 <?php
 
-class Database
+class ContactsDatabase
 {
     private $con;
-    private string $dbhost = $_SERVER['EA_HOST'];
-    private string $dbuser = $_SERVER['EA_USER'];
-    private string $dbpass = $_SERVER['EA_PASS'];
-    private string $dbname = $_SERVER['EA_DB'];
+    private string $dbhost = "localhost";
+    private string $dbuser = "root";
+    private string $dbpass = "";
+    private string $dbname = "directorio_personal";
     function __construct()
     {
         $this->connect_db();
@@ -15,7 +15,7 @@ class Database
     {
         $this->con = mysqli_connect($this->dbhost, $this->dbuser, $this->dbpass, $this->dbname);
         if (mysqli_connect_error()) {
-            die("Server can not connect to database " . mysqli_connect_error() . mysqli_connect_errno());
+            die("Server can not connect to Database " . mysqli_connect_error() . mysqli_connect_errno());
         }
     }
 

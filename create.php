@@ -37,8 +37,8 @@
         </div>
     </div>
     <?php
-    include("database.php");
-    $contacts = new Database();
+    include("contacts_database.php");
+    $contacts = new ContactsDatabase();
     if (isset($_POST) && !empty($_POST)) {
         $contact_nickname = $contacts->sanitize($_POST['nickname']);
         $contact_name = $contacts->sanitize($_POST['name']);
