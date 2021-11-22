@@ -41,8 +41,8 @@
 
         <div class="card-body">
             <h2 class="card-title">¿Qué es EAgenda?</h2>
-            <p>EAgenda es el inicio de un proyecto que busca crear la agenda electrónica más completa y con la mayor cantidad de funcionalidades que permite la tecnología actual.
-                <br>EAgenda es además un proyecto universitario y libre.
+            <p>EAgenda is the beginning of a project that seeks to create the most complete electronic agenda and with the greatest amount of functionalities that current technology allows.
+                <br>EAgenda is also a free university project.
             </p>
             <div class="justify-center card-actions">
 
