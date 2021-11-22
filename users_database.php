@@ -49,8 +49,10 @@ class UsersDatabase
         $user_image
     ) {
         $md5password = md5($user_password);
-        $sql = "INSERT INTO `users` (create_time, user_nickname, user_firstname, user_lastname, user_password, user_birthday, user_number, user_email, user_address, user_image) VALUES (NOW(),
-        '$user_nickname', '$user_firstname', '$user_lastname', '$md5password', '$user_birthday', '$user_number', '$user_email', '$user_address', '$user_image')";
+        $sql = "INSERT INTO `users` (create_time, user_nickname, user_firstname, user_lastname,
+        user_password, user_birthday, user_number, user_email, user_address, user_image) VALUES (NOW(),
+        '$user_nickname', '$user_firstname', '$user_lastname', '$md5password', '$user_birthday',
+        '$user_number', '$user_email', '$user_address', '$user_image')";
         $res = mysqli_query($this->con, $sql);
         if ($res) {
             $this->startSession($user_email, $md5password);

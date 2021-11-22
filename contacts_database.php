@@ -48,8 +48,10 @@ class ContactsDatabase
         $contact_image,
         $user
     ) {
-        $sql = "INSERT INTO `contacts` (create_time, contact_nickname, contact_firstname, contact_lastname, contact_number, contact_email, contact_birthday, contact_address, contact_image, contact_user_id) VALUES (NOW(),
-        '$contact_nickname', '$contact_firstname', '$contact_lastname', '$contact_number', '$contact_email', '$contact_birthday', '$contact_address', '$contact_image', '$user->user_id')";
+        $sql = "INSERT INTO `contacts` (create_time, contact_nickname, contact_firstname, contact_lastname,
+        contact_number, contact_email, contact_birthday, contact_address, contact_image, contact_user_id)
+        VALUES (NOW(), '$contact_nickname', '$contact_firstname', '$contact_lastname', '$contact_number',
+        '$contact_email', '$contact_birthday', '$contact_address', '$contact_image', '$user->user_id')";
         $res = mysqli_query($this->con, $sql);
         if ($res) {
             return true;
