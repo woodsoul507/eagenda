@@ -1,7 +1,9 @@
 <?php
 
 require_once realpath(__DIR__ . "/vendor/autoload.php");
+
 use Dotenv\Dotenv;
+
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
@@ -41,11 +43,13 @@ class ContactsDatabase
         $contact_lastname,
         $contact_number,
         $contact_email,
+        $contact_birthday,
         $contact_address,
-        $contact_image
+        $contact_image,
+        $user
     ) {
-        $sql = "INSERT INTO `contacts` (create_time, contact_nickname, contact_firstname, contact_lastname, contact_number, contact_email, contact_address, contact_image) VALUES (NOW(),
-        '$contact_nickname', '$contact_firstname', '$contact_lastname', '$contact_number', '$contact_email', '$contact_address', '$contact_image')";
+        $sql = "INSERT INTO `contacts` (create_time, contact_nickname, contact_firstname, contact_lastname, contact_number, contact_email, contact_birthday, contact_address, contact_image, contact_user_id) VALUES (NOW(),
+        '$contact_nickname', '$contact_firstname', '$contact_lastname', '$contact_number', '$contact_email', '$contact_birthday', '$contact_address', '$contact_image', '$user->user_id')";
         $res = mysqli_query($this->con, $sql);
         if ($res) {
             return true;
@@ -54,9 +58,9 @@ class ContactsDatabase
         }
     }
 
-    public function read()
+    public function read($user)
     {
-        $sql = "SELECT * FROM contacts";
+        $sql = "SELECT * FROM contacts WHERE contact_user_id = '$user->user_id'";
         $res = mysqli_query($this->con, $sql);
         return $res;
     }
@@ -75,13 +79,19 @@ class ContactsDatabase
         $contact_lastname,
         $contact_number,
         $contact_email,
+        $contact_birthday,
         $contact_address,
         $contact_image,
         $contact_id
     ) {
         $sql = "UPDATE contacts SET update_time=NOW(), contact_nickname='$contact_nickname', contact_firstname='$contact_firstname',
         contact_lastname='$contact_lastname', contact_number='$contact_number', contact_email='$contact_email',
-        contact_address='$contact_address', contact_image='$contact_image' WHERE contact_id=$contact_id";
+        contact_address='$contact_address', contact_image='$contact_image'";
+        if (strcmp($contact_birthday, "") != 0) {
+            $sql = $sql . ", contact_birthday='$contact_birthday' WHERE contact_id=$contact_id";
+        } else {
+            $sql = $sql . " WHERE contact_id=$contact_id";
+        }
         $res = mysqli_query($this->con, $sql);
         if ($res) {
             return true;
@@ -95,6 +105,20 @@ class ContactsDatabase
         $sql = "DELETE FROM contacts WHERE contact_id=$contact_id";
         $res = mysqli_query($this->con, $sql);
         if ($res) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function updateAuth($id)
+    {
+        $user = $_SESSION['user'];
+        $user_id = intval($user->user_id);
+        $sql = "SELECT COUNT(*) as isAuth FROM contacts WHERE contact_id = '$id' AND contact_user_id = '$user_id'";
+        $res = mysqli_query($this->con, $sql);
+        $resArray = mysqli_fetch_array($res);
+        if ($resArray['isAuth'] > 0) {
             return true;
         } else {
             return false;
