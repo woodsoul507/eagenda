@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (isset($_SESSION['user'])) {
+    header("location: contacts/contacts_list.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +12,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>EAgenda - Create Account</title>
+    <title>EAgenda - Sign Up</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link href="https://cdn.jsdelivr.net/npm/daisyui@1.16.2/dist/full.css" rel="stylesheet" type="text/css" />
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css" rel="stylesheet" type="text/css" />
@@ -78,7 +85,7 @@
     <?php
     }
     ?>
-    <h2 class="flex justify-center mt-14 mb-4 text-3xl">Create new account</h2>
+    <h2 class="flex justify-center mt-14 mb-4 text-3xl">Sign Up</h2>
     <div class="flex justify-center">
         <form class="w-full max-w-lg" method="POST">
             <div class="flex flex-wrap -mx-3 mb-6">
@@ -151,9 +158,16 @@
             </div>
             <div class="flex flex-wrap -mx-3 mb-3">
                 <div class="w-full px-3">
-                    <input class="btn appearance-none block w-full bg-gray-900 text-white border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 focus:text-gray-700" id="grid-submit" type="submit" value="Submit">
+                    <input class="btn appearance-none block w-full bg-gray-900 text-white border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 focus:text-gray-700" id="grid-submit" type="submit" value="Create">
                 </div>
-                <a href="login_user.php" class="px-5 text-lg">I have an account already!</a>
+                <div class="w-full md:w-1/2 px-3">
+                    <a href="login_user.php" class="px-5 text-lg">I have an account already!</a>
+                </div>
+                <div class="w-full md:w-1/2 px-3 text-right">
+                    <a href="about.php" class="px-5 text-lg">
+                        About
+                    </a>
+                </div>
             </div>
 
         </form>

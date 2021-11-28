@@ -3,13 +3,28 @@ session_start();
 if (isset($_SESSION['user'])) {
     $user = $_SESSION['user'];
     $id = intval($user->user_id);
+    $theme = ($_SESSION['user']->user_theme == 0) ? 'light' : 'dark';
 } else {
-    header("location: index.php");
+    header("location: login_user.php");
+    exit();
+}
+
+include("users_database.php");
+$users = new UsersDatabase();
+if (isset($_POST) && $_POST['theme'] != null) {
+    $_SESSION['user']->user_theme = intval($_POST['theme']);
+    $theme = ($_SESSION['user']->user_theme == 0) ? 'light' : 'dark';
+    $user_theme = $users->sanitize($_POST['theme']);
+    $user_id = $id;
+    $res = $users->changeTheme(
+        $user_id,
+        $user_theme
+    );
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="<?php echo $theme; ?>">
 
 <head>
     <meta charset="utf-8">
@@ -22,7 +37,6 @@ if (isset($_SESSION['user'])) {
 </head>
 
 <body>
-
 
     <div class="navbar mb-2 shadow-lg bg-neutral text-neutral-content">
         <div class="px-2 mx-2 navbar-start">
@@ -44,6 +58,12 @@ if (isset($_SESSION['user'])) {
             </div>
         </div>
         <div class="navbar-end">
+            <form method="post" class="mr-4">
+                <select data-theme='dark' class="select select-bordered" name="theme" onchange='if(this.value != null) { this.form.submit(); }'>
+                    <option disabled="disabled" selected="selected"><?php echo strtoupper($theme); ?></option>
+                    <?php echo $theme != "light" ? "<option value='0'>LIGHT</option>" : "<option value='1'>DARK</option>" ?>
+                </select>
+            </form>
             <button class="btn btn-square btn-ghost" onclick="location.href='logout_user.php';">
                 <span class="material-icons">logout</span>
             </button>
@@ -60,10 +80,10 @@ if (isset($_SESSION['user'])) {
         </div>
     </div>
     <?php
-    include("users_database.php");
+    // include("users_database.php");
     $user_data;
     $users = new UsersDatabase();
-    if (isset($_POST) && !empty($_POST)) {
+    if (isset($_POST) && !empty($_POST['update'])) {
         $user_nickname = $users->sanitize($_POST['nickname']);
         $user_firstname = $users->sanitize($_POST['firstname']);
         $user_lastname = $users->sanitize($_POST['lastname']);
@@ -94,7 +114,7 @@ if (isset($_SESSION['user'])) {
                 </div>
                 </div>";
 
-            echo "<div> $message; </div>";
+            echo $message;
         } else {
             $message = "<div class='alert alert-error'>
                 <div class='flex-1'>
@@ -104,7 +124,7 @@ if (isset($_SESSION['user'])) {
                 <label>Profile was not updated!</label>
                 </div>
                 </div>";
-            echo "<div> $message; </div>";
+            echo $message;
         }
     }
     ?>
@@ -180,7 +200,7 @@ if (isset($_SESSION['user'])) {
             </div>
             <div class='flex flex-wrap -mx-3 mb-6'>
                 <div class='w-full px-3'>
-                    <input class='btn appearance-none block w-full bg-gray-900 text-white border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 focus:text-gray-700' id='grid-submit' type='submit' value='Submit'>
+                    <input class='btn appearance-none block w-full bg-gray-900 text-white border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 focus:text-gray-700' id='grid-submit' type='submit' value='Update' name='update'>
                 </div>
             </div>
 

@@ -19,6 +19,7 @@ class UsersDatabase
     private string $dbuser = USER;
     private string $dbpass = PASS;
     private string $dbname = NAME;
+
     public function __construct()
     {
         $this->connect_db();
@@ -141,5 +142,17 @@ class UsersDatabase
         $user = mysqli_query($this->con, $sql);
         $user_object = mysqli_fetch_object($user);
         $_SESSION['user'] = $user_object;
+        $_SESSION['theme'] = $user_object->user_theme;
+    }
+
+    public function changeTheme($user_id, $user_theme)
+    {
+        $sql = "UPDATE users SET  user_theme='$user_theme' WHERE user_id=$user_id";
+        mysqli_query($this->con, $sql);
+        $sql = "SELECT * FROM users WHERE user_id = '$user_id'";
+        $user = mysqli_query($this->con, $sql);
+        $user_object = mysqli_fetch_object($user);
+        $_SESSION['user'] = $user_object;
+        $_SESSION['theme'] = $user_object->user_theme;
     }
 }

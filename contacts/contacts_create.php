@@ -1,9 +1,30 @@
 <?php
 session_start();
-$user = $_SESSION['user'];
+if (isset($_SESSION['user'])) {
+    $user = $_SESSION['user'];
+    $id = intval($_SESSION['user']->user_id);
+    $theme = ($_SESSION['user']->user_theme == 0) ? 'light' : 'dark';
+} else {
+    header("location: ../login_user.php");
+    exit();
+}
+
+include("../users_database.php");
+$users = new UsersDatabase();
+if (isset($_POST) && $_POST['theme'] != null) {
+    $_SESSION['user']->user_theme = intval($_POST['theme']);
+    $theme = ($_SESSION['user']->user_theme == 0) ? 'light' : 'dark';
+    $user_theme = $users->sanitize($_POST['theme']);
+    $user_id = $id;
+    $res = $users->changeTheme(
+        $user_id,
+        $user_theme
+    );
+}
 ?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="<?php echo $theme; ?>">
 
 <head>
     <meta charset="utf-8">
@@ -34,6 +55,12 @@ $user = $_SESSION['user'];
             </div>
         </div>
         <div class="navbar-end">
+            <form method="post" class="mr-4">
+                <select data-theme='dark' class="select select-bordered" name="theme" onchange='if(this.value != null) { this.form.submit(); }'>
+                    <option disabled="disabled" selected="selected"><?php echo strtoupper($theme); ?></option>
+                    <?php echo $theme != "light" ? "<option value='0'>LIGHT</option>" : "<option value='1'>DARK</option>" ?>
+                </select>
+            </form>
             <button class="btn btn-square btn-ghost" onclick="location.href='../logout_user.php';">
                 <span class="material-icons">logout</span>
             </button>
@@ -54,7 +81,7 @@ $user = $_SESSION['user'];
     include("../contacts_database.php");
     $user = $_SESSION['user'];
     $contacts = new ContactsDatabase();
-    if (isset($_POST) && !empty($_POST)) {
+    if (isset($_POST) && !empty($_POST['create'])) {
         $contact_nickname = $contacts->sanitize($_POST['nickname']);
         $contact_name = $contacts->sanitize($_POST['firstname']);
         $contact_lastname = $contacts->sanitize($_POST['lastname']);
@@ -161,7 +188,7 @@ $user = $_SESSION['user'];
             </div>
             <div class="flex flex-wrap -mx-3 mb-6">
                 <div class="w-full px-3">
-                    <input class="btn appearance-none block w-full bg-gray-900 text-white border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 focus:text-gray-700" id="grid-submit" type="submit" value="Submit">
+                    <input class="btn appearance-none block w-full bg-gray-900 text-white border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 focus:text-gray-700" id="grid-submit" type="submit" value="Create" name="create">
                 </div>
             </div>
 

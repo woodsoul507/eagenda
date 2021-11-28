@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (isset($_SESSION['user'])) {
+    header("location: contacts/contacts_list.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +12,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>EAgenda - Create</title>
+    <title>EAgenda - Sign In</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link href="https://cdn.jsdelivr.net/npm/daisyui@1.16.2/dist/full.css" rel="stylesheet" type="text/css" />
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css" rel="stylesheet" type="text/css" />
@@ -16,7 +23,7 @@
     <?php
     include "users_database.php";
     $user = new UsersDatabase();
-    if (isset($_POST) && !empty($_POST)) {
+    if (isset($_POST) && !empty($_POST['login'])) {
         $user_password = $user->sanitize($_POST['password']);
         $user_email = $user->sanitize($_POST['email']);
         $res = $user->login(
@@ -72,9 +79,16 @@
                         <input name="password" required="true" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="password" placeholder="*******">
                     </div>
                     <div class="w-full px-3">
-                        <input class="btn appearance-none block w-full bg-gray-900 text-white border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 focus:text-gray-700" id="grid-submit" type="submit" value="Submit">
+                        <input class="btn appearance-none block w-full bg-gray-900 text-white border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 focus:text-gray-700" id="grid-submit" type="submit" name="login" value="Log In">
                     </div>
-                    <a href="create_user.php" class="px-5 text-lg">Create new account!</a>
+                    <div class="w-full md:w-1/2 px-3">
+                        <a href="create_user.php" class="px-5 text-lg">Create a new account!</a>
+                    </div>
+                    <div class="w-full md:w-1/2 px-3 text-right">
+                        <a href="about.php" class="px-5 text-lg">
+                            About
+                        </a>
+                    </div>
                 </div>
 
             </form>
